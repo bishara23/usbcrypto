@@ -29,7 +29,7 @@ After enabling the logging of event 2003, task scheduler can pick up that event 
     ```
     - Add arguments:
     ```
-    /c "python -m usbutils.scripts.decrypt"
+    /c "python -m usbcrypto.scripts.decrypt"
     ```
     - Start in: add the folder containing the project.
 
