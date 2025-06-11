@@ -9,7 +9,7 @@ def main():
     password = input()
 
     encryptor = Encryptor()
-    #encryptor.sign_all_files_in_folder(path)
+    encryptor.sign_all_files_in_folder(path)
     encryptor.encrypt_all_in_folder(path, password)
     input('press Enter to exit')
     
