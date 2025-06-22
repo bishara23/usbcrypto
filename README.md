@@ -33,3 +33,41 @@ After enabling the logging of event 2003, task scheduler can pick up that event 
     ```
     - Start in: add the folder containing the project.
 
+
+# Usage
+## Encrypt & Sign
+On a **trusted PC**, from the repo root run:
+```bash
+python encrypt.py
+
+This will:
+1. Auto-detect your USB stick (`USBManager.find_usb_drive`)  
+2. Prompt you for a password  
+3. Prepend a 32-byte SHA3-256 signature to every file (`Encryptor.sign_all_files_in_folder`)  
+4. Encrypt each file in-place with AES-GCM using an Argon2id-derived key (`Encryptor.encrypt_all_in_folder`)
+
+## Decrypt & Verify (Automatic on USB Insert)
+Once Task Scheduler is configured, decrypt & verify runs automatically upon USB insertion (Event ID 2003). The `decrypt.py` script will:
+1. Auto-detect the USB stick (`USBManager.find_usb_drive`)  
+2. Prompt for the **same** password  
+3. Decrypt each file and verify its SHA3-256 signature (`Decryptor.decrypt_all_in_folder`)  
+4. Strip the 32-byte signature on success (`Decryptor.strip_signature`)  
+5. Pop up “✅ Access Granted” or immediately disable the USB on any failure (`USBManager.alert_and_disable`)
+
+# Project Structure
+
+    usbcrypto/
+    ├── derive_key.py        # Argon2id KDF for key derivation
+    ├── crypto.py            # Core Encryptor, Decryptor & USBManager
+    ├── encrypt.py           # CLI: sign & encrypt all files on USB
+    ├── decrypt.py           # CLI: decrypt & verify all files on USB
+    ├── requirements.txt     # cryptography, argon2-cffi
+    └── metadata.json        # Generated on USB after encryption
+
+# Metadata Format
+After encryption, a `metadata.json` is created in the USB root. It maps each relative file path to:
+- **salt**: Argon2id salt (base64)  
+- **iv**: AES-GCM nonce (base64)  
+- **kdf**: key-derivation function identifier  
+
+The decrypt script reads this file to derive the correct key/IV for each file.
