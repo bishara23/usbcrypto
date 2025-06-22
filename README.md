@@ -39,7 +39,7 @@ After enabling the logging of event 2003, task scheduler can pick up that event 
 On a **trusted PC**, from the repo root run:
 ```bash
 python encrypt.py
-
+```
 This will:
 1. Auto-detect your USB stick (`USBManager.find_usb_drive`)  
 2. Prompt you for a password  
@@ -55,14 +55,15 @@ Once Task Scheduler is configured, decrypt & verify runs automatically upon USB 
 5. Pop up “✅ Access Granted” or immediately disable the USB on any failure (`USBManager.alert_and_disable`)
 
 # Project Structure
-
-    usbcrypto/
-    ├── derive_key.py        # Argon2id KDF for key derivation
-    ├── crypto.py            # Core Encryptor, Decryptor & USBManager
-    ├── encrypt.py           # CLI: sign & encrypt all files on USB
-    ├── decrypt.py           # CLI: decrypt & verify all files on USB
-    ├── requirements.txt     # cryptography, argon2-cffi
-    └── metadata.json        # Generated on USB after encryption
+```text
+usbcrypto/
+├── derive_key.py        # Argon2id KDF for key derivation
+├── crypto.py            # Core Encryptor, Decryptor & USBManager
+├── encrypt.py           # CLI: sign & encrypt all files on USB
+├── decrypt.py           # CLI: decrypt & verify all files on USB
+├── requirements.txt     # cryptography, argon2-cffi
+└── metadata.json        # Generated on USB after encryption
+```
 
 # Metadata Format
 After encryption, a `metadata.json` is created in the USB root. It maps each relative file path to:
